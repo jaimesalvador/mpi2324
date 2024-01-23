@@ -34,15 +34,15 @@ int main(int argc, char** argv) {
     rows_per_rank = rows_alloc / nprocs;
 
     std::unique_ptr<double[]> A;
-    std::unique_ptr<double[]> b = std::make_unique<double[]>(MATRIX_DIMENSION);;
+    std::unique_ptr<double[]> b = std::make_unique<double[]>(MATRIX_DIMENSION);
     std::unique_ptr<double[]> c;
 
     std::unique_ptr<double[]> A_local;
     std::unique_ptr<double[]> c_local;
 
     if(rank==0) {
-        //imrpimir informacion
-        std::printf("Dimnension: %d, rows_alloc: %d, rows_per_rank: %d, padding: %d\n",
+        //imprimir informacion
+        std::printf("Dimension: %d, rows_alloc: %d, rows_per_rank: %d, padding: %d\n",
                     MATRIX_DIMENSION, rows_alloc, rows_per_rank, padding);
 
         //
@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
     A_local = std::make_unique<double[]>(MATRIX_DIMENSION*rows_per_rank);
     c_local = std::make_unique<double[]>(rows_per_rank);;
 
-    //enviar la matriz A
+    //enviar/recibir la matriz A
     MPI_Scatter(A.get(), MATRIX_DIMENSION*rows_per_rank, MPI_DOUBLE,
                 A_local.get(), MATRIX_DIMENSION*rows_per_rank, MPI_DOUBLE,
                 0, MPI_COMM_WORLD);
@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
 
     matrix_mult(A_local.get(), b.get(), c_local.get(), rows_per_rank_tmp, MATRIX_DIMENSION);
 
-    //recibir los resultados aprciales
+    //enviar/recibir los resultados parciales
     MPI_Gather(c_local.get(), rows_per_rank, MPI_DOUBLE,
                c.get(), rows_per_rank, MPI_DOUBLE,
                0, MPI_COMM_WORLD);

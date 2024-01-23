@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
 
     if(rank==0) {
         //imrpimir informacion
-        std::printf("Dimnension: %d, rows_alloc: %d, rows_per_rank: %d, padding: %d\n",
+        std::printf("Dimension: %d, rows_alloc: %d, rows_per_rank: %d, padding: %d\n",
                     MATRIX_DIMENSION, rows_alloc, rows_per_rank, padding);
 
         //
@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
         //realizar el calculo: c = A x b
         matrix_mult(A.data(), b.data(), c.data(), rows_per_rank, MATRIX_DIMENSION);
 
-        //recibir los resultados aprciales
+        //recibir los resultados parciales
         MPI_Gather(MPI_IN_PLACE, 0, MPI_DOUBLE,
                    c.data(), rows_per_rank, MPI_DOUBLE,
                    0, MPI_COMM_WORLD);
