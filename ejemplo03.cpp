@@ -4,6 +4,8 @@
 #include <iostream>
 #include <mpi.h>
 
+
+
 int sumar(int* tmp, int n) {
     int suma = 0;
     for(int i=0;i<n;i++) {
